@@ -4,14 +4,10 @@ using System.Collections;
 public class MusicPlayer : MonoBehaviour {
 
 	static MusicPlayer instance = null;
+	//this is a singleton or a persitance singleton pattern. 
 	void Awake(){
-		Debug.Log("music player awake" + GetInstanceID());
-	}
-	void Start(){
-		Debug.Log("music player start" + GetInstanceID());
 		if( instance != null ){
 			Destroy(gameObject);
-			print ("Destroyed Music player");
 		}
 		else {
 			instance = this; //this is true?
@@ -19,5 +15,5 @@ public class MusicPlayer : MonoBehaviour {
 		}
 	}	
 	//Explanation of the music bug
-	//
+	//oRIGINALLY the script was in the start method, however start works on each time that level starts up. WHile Awake plays only once and stays instatations
 }
