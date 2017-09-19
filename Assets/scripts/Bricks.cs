@@ -4,29 +4,40 @@ using System.Collections;
 public class Bricks : MonoBehaviour {
 	private int timesHit;
 	private LevelManager levelManager;
+	private bool isBreakable;
 	
+	public static int breakableCount = 0;
+	public AudioClip crack;
 	public Sprite[] hitSprites;
 	
 	// Use this for initialization
 	void Start () {
+		isBreakable = (this.tag == "Breakable");
+		//keeping track of breakable 
+		if(isBreakable){
+			breakableCount++;
+		}
 		timesHit = 0;
 		levelManager = GameObject.FindObjectOfType<LevelManager>();
 	}
 	
 	void OnCollisionExit2D(Collision2D hit){
+		AudioSource.PlayClipAtPoint(crack, transform.position);
+		if(isBreakable){
+			handleHits();
+		}
+	}
+	void handleHits(){
 		timesHit++;
 		int maxHits = hitSprites.Length +1;
 		if(timesHit >= maxHits){
+			breakableCount--;
+			levelManager.BrickDestroyed();
 			Destroy (gameObject);
 		}
 		else{
 			LoadSprites();
 		}
-	}
-	// TODO remove this methode
-	
-	void SimulateWin(){
-		levelManager.LoadNextLevel();
 	}
 	void LoadSprites(){
 		int spriteIndex = timesHit -1;
